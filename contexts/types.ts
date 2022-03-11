@@ -13,8 +13,22 @@ type CartContextType = {
   setItems: (newItems: ICartItem[]) => void;
 };
 
+type AuthContextType = {
+  token: string;
+  setToken: (newToken: string) => void;
+};
+
 type CartContextProps = {
   children: ReactNode;
 };
 
-export type { CartContextType, CartContextProps };
+type AuthContextProps = {
+  children: ReactNode;
+}
+
+export type {
+  CartContextType,
+  CartContextProps,
+  AuthContextType,
+  AuthContextProps,
+};

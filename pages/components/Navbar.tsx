@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import Image from "next/image";
 import { createStyles, makeStyles } from "@mui/styles";
 
@@ -6,6 +6,8 @@ import logo from "../../assets/logo.svg";
 import styles from "../../styles/Home.module.css";
 import theme from "../../styles/theme";
 import { Button } from "@mui/material";
+import { AuthContext } from "../../contexts/AuthContext";
+import axios from "axios";
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -27,13 +29,24 @@ const useStyles = makeStyles(() =>
       boxSizing: "border-box",
       textTransform: "capitalize",
       fontWeight: 300,
-      letterSpacing: ".06rem"
+      letterSpacing: ".06rem",
     },
   })
 );
 
 function Navbar() {
   const classes = useStyles();
+  const { setToken } = useContext(AuthContext);
+  const authURL = "https://localhost:7098/api/home/auth";
+
+  const simulateAuthentication = async () => {
+    const response = await axios({
+      method: "post",
+      url: authURL,
+    })
+
+    setToken(response.data);
+  }
 
   return (
     <nav className={styles.nav}>
@@ -46,7 +59,13 @@ function Navbar() {
         </h1>
       </div>
       <div>
-        <Button className={classes.button} variant="contained">authenticate</Button>
+        <Button 
+          className={classes.button} 
+          variant="contained"
+          onClick={simulateAuthentication}
+        >
+          autenticar
+        </Button>
       </div>
     </nav>
   );

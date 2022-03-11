@@ -4,15 +4,18 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 
 import theme from "../styles/theme";
 import { CartContextProvider } from "../contexts/CartContext";
+import { AuthContextProvider } from "../contexts/AuthContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <CartContextProvider>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Component {...pageProps} />
-      </ThemeProvider>
-    </CartContextProvider>
+    <AuthContextProvider>
+      <CartContextProvider>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </CartContextProvider>
+    </AuthContextProvider>
   );
 }
 
