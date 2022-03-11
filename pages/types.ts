@@ -15,6 +15,14 @@ interface IProduct {
   stock: number;
 }
 
+interface IProductsTableCore {
+  rowsPerPage: number;
+  rows: ProductRow[];
+  page: number;
+  emptyRows: number;
+  products: IProduct[];
+}
+
 type CartContextType = {
   address: string;
   setAddress: (newAddress: string) => void;
@@ -46,6 +54,13 @@ type ProductsContextProps = {
   children: ReactNode;
 };
 
+type ProductRow = {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+};
+
 export type {
   CartContextType,
   CartContextProps,
@@ -54,4 +69,6 @@ export type {
   IProduct,
   ProductsContextType,
   ProductsContextProps,
+  ProductRow,
+  IProductsTableCore,
 };

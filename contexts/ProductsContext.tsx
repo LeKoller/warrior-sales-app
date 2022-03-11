@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import { ProductsContextProps, ProductsContextType, IProduct } from "./types";
+import { ProductsContextProps, ProductsContextType, IProduct } from "../pages/types";
 
 const emptyProduct: IProduct = {
   id: 0,

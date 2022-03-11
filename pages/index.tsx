@@ -1,22 +1,53 @@
 import axios from "axios";
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useContext } from "react";
 
 import styles from "../styles/Home.module.css";
 import Chart from "./components/Chart";
 import Navbar from "./components/Navbar";
 import ProductsTable from "./components/ProductsTable";
 import { Snackbar, Alert, AlertTitle } from "@mui/material";
+import { ProductsContext } from "../contexts/ProductsContext";
 
 const Home: NextPage = () => {
+  const { setProducts } = useContext(ProductsContext);
+
   const [isConnectedWithBackend, setIsConnectedWithBackend] = useState(true);
   const [isDatabaseEmpty, setIsDatabaseEmpty] = useState(false);
   const [seedingSucceeded, setSeedingSucceeded] = useState(false);
 
   const homeURL = "https://localhost:7098/api/home";
+  const productsURL = "https://localhost:7098/api/products";
 
-  const requestHome = async () => {
+  const loadProducts = useCallback(async () => {
+    try {
+      const response = await axios({
+        method: "get",
+        url: productsURL,
+      });
+
+      if (response.status === 200) {
+        setProducts(response.data);
+      }
+    } catch {
+      setIsConnectedWithBackend(false);
+    }
+  }, [setProducts, setIsConnectedWithBackend]);
+
+  const seed = useCallback(async () => {
+    const response = await axios({
+      method: "post",
+      url: homeURL + "/seed",
+    });
+
+    if (response.status === 200) {
+      setSeedingSucceeded(true);
+      loadProducts();
+    }
+  }, [loadProducts]);
+
+  const requestHome = useCallback(async () => {
     try {
       const response = await axios({
         method: "get",
@@ -25,19 +56,14 @@ const Home: NextPage = () => {
 
       if (response.status === 204) {
         setIsDatabaseEmpty(true);
-        const seedRes = await axios({
-          method: "post",
-          url: homeURL + "/seed",
-        });
-
-        if (seedRes.status) {
-          setSeedingSucceeded(true);
-        }
+        seed();
+      } else if (response.status === 200) {
+        loadProducts();
       }
     } catch {
       setIsConnectedWithBackend(false);
     }
-  };
+  }, [seed, loadProducts]);
 
   const handleCloseDatabaseEmptyWarning = () => {
     setIsDatabaseEmpty(false);
@@ -49,7 +75,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     requestHome();
-  }, []);
+  }, [requestHome]);
 
   return (
     <div className={styles.container}>
@@ -71,12 +97,10 @@ const Home: NextPage = () => {
         open={!isConnectedWithBackend}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       >
-        <Alert
-          severity="error"
-          variant="filled"
-        >
+        <Alert severity="error" variant="filled">
           <AlertTitle>Não foi possível se comunicar com o servidor</AlertTitle>
-          Pode ser que ele não esteja ligado em sua máquina ou algo tenha dado errado.
+          Pode ser que ele não esteja ligado em sua máquina ou algo tenha dado
+          errado.
         </Alert>
       </Snackbar>
 
