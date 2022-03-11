@@ -6,6 +6,15 @@ interface ICartItem {
   quantity: number;
 }
 
+interface IProduct {
+  id: number;
+  name: string;
+  price: number;
+  category: string;
+  description: string;
+  stock: number;
+}
+
 type CartContextType = {
   address: string;
   setAddress: (newAddress: string) => void;
@@ -18,17 +27,31 @@ type AuthContextType = {
   setToken: (newToken: string) => void;
 };
 
+type ProductsContextType = {
+  item: IProduct;
+  setItem: (newItem: IProduct) => void;
+  products: IProduct[];
+  setProducts: (newProducts: IProduct[]) => void;
+};
+
 type CartContextProps = {
   children: ReactNode;
 };
 
 type AuthContextProps = {
   children: ReactNode;
-}
+};
+
+type ProductsContextProps = {
+  children: ReactNode;
+};
 
 export type {
   CartContextType,
   CartContextProps,
   AuthContextType,
   AuthContextProps,
+  IProduct,
+  ProductsContextType,
+  ProductsContextProps,
 };
