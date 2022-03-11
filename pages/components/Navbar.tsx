@@ -60,7 +60,7 @@ function Navbar() {
       </div>
       <div>
         <Button 
-          className={classes.button} 
+          className={styles.button} 
           variant="contained"
           onClick={simulateAuthentication}
         >

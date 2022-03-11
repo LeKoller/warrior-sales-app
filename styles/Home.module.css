@@ -13,6 +13,17 @@
   background-color: #dad8e0;
 }
 
+.button {
+  background-color: #1254BF;
+  color: white;
+  width: 173px;
+  height: 48px;
+  box-sizing: border-box;
+  text-transform: capitalize;
+  font-weight: 300;
+  letter-spacing: .06rem;
+}
+
 .footer {
   display: flex;
   flex: 1;
