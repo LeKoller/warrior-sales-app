@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import Image from "next/image";
 import { createStyles, makeStyles } from "@mui/styles";
+import { Button } from "@mui/material";
 
 import logo from "../../assets/logo.svg";
 import styles from "../../styles/Home.module.css";
 import theme from "../../styles/theme";
-import { Button } from "@mui/material";
 import { AuthContext } from "../../contexts/AuthContext";
 import axios from "axios";
 

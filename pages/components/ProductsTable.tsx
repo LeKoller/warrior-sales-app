@@ -123,14 +123,15 @@ function createData(
 const useStyles = makeStyles(() =>
   createStyles({
     container: {
-      width: "56%",
+      width: "100%",
+      padding: "0 8px 8px 8px",
     },
     title: {
       font: theme.typography.fontFamily,
       color: theme.palette.grey[800],
       fontWeight: 400,
       fontSize: "24px",
-      marginLeft: "16px",
+      marginLeft: "12px",
     },
   })
 );

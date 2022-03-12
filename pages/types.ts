@@ -71,4 +71,5 @@ export type {
   ProductsContextProps,
   ProductRow,
   IProductsTableCore,
+  ICartItem,
 };

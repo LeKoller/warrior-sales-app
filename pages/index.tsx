@@ -2,16 +2,17 @@ import axios from "axios";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState, useCallback, useContext } from "react";
+import { Snackbar, Alert, AlertTitle } from "@mui/material";
 
 import styles from "../styles/Home.module.css";
 import Chart from "./components/Chart";
 import Navbar from "./components/Navbar";
 import ProductsTable from "./components/ProductsTable";
-import { Snackbar, Alert, AlertTitle } from "@mui/material";
 import { ProductsContext } from "../contexts/ProductsContext";
+import OrderBox from "./components/OrderBox";
 
 const Home: NextPage = () => {
-  const { setProducts } = useContext(ProductsContext);
+  const { item, setProducts } = useContext(ProductsContext);
 
   const [isConnectedWithBackend, setIsConnectedWithBackend] = useState(true);
   const [isDatabaseEmpty, setIsDatabaseEmpty] = useState(false);
@@ -88,9 +89,13 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navbar />
+
       <main className={styles.main}>
         <Chart />
-        <ProductsTable />
+        <div className={styles.productsSection}>
+          <ProductsTable />
+          {item.id !== 0 && <OrderBox item={item} />}
+        </div>
       </main>
 
       <Snackbar
