@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import { AuthContextProps, AuthContextType } from "../pages/types";
+import { AuthContextProps, AuthContextType } from "../types";
 
 const initial = {
   token: "",

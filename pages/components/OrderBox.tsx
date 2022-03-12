@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Snackbar, Alert, AlertTitle } from "@mui/material";
 
-import { IProduct, ICartItem } from "../types";
+import { IProduct, ICartItem } from "../../types";
 import { Button, Paper } from "@mui/material";
 import styles from "../../styles/OrderBox.module.css";
 import { CartContext } from "../../contexts/CartContext";

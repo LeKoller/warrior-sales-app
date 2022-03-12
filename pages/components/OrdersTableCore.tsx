@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { TableBody, TableCell, TableRow } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { IProductsTableCore } from "../../types";
+import { IOrdersTableCore } from "../../types";
 import { ProductsContext } from "../../contexts/ProductsContext";
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -22,32 +22,29 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function ProductsTableCore(props: IProductsTableCore) {
-  const {emptyRows, page, rows, rowsPerPage, products} = props;
-  const {setItem} = useContext(ProductsContext)
+function OrdersTableCore(props: IOrdersTableCore) {
+  const {emptyRows, page, rows, rowsPerPage, orders} = props;
+//   const {setItem} = useContext(ProductsContext)
 
-  const selectItem = (id: number) => {
-    const item = products.find(p => p.id === id)
-    if (item) {
-      setItem(item)
-    }
-  }
+//   const selectItem = (id: number) => {
+//     const item = orders.find(o => o.id === id)
+//     if (item) {
+//       setItem(item)
+//     }
+//   }
   
   return (
     <TableBody>
-      {(rowsPerPage > 0
-        ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-        : rows
-      ).map((row) => (
-        <StyledTableRow key={row.name} onClick={() => selectItem(row.id)}>
+      {rows.map((row) => (
+        <StyledTableRow key={row.id} onClick={() => {}}>
           <TableCell component="th" scope="row">
-            {row.name}
-          </TableCell>
-          <TableCell style={{ width: 160 }} align="left">
-            {row.description}
+            {row.address}
           </TableCell>
           <TableCell style={{ width: 160 }} align="right">
-            {row.price.toFixed(2)}
+            {row.team}
+          </TableCell>
+          <TableCell style={{ width: 160 }} align="right">
+            {row.delivery ? row.delivery : "Não"}
           </TableCell>
         </StyledTableRow>
       ))}
@@ -60,4 +57,4 @@ function ProductsTableCore(props: IProductsTableCore) {
   );
 }
 
-export default ProductsTableCore;
+export default OrdersTableCore;

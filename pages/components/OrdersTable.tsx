@@ -17,9 +17,9 @@ import LastPageIcon from "@mui/icons-material/LastPage";
 
 import theme from "../../styles/theme";
 import { TableHead } from "@mui/material";
-import { ProductsContext } from "../../contexts/ProductsContext";
-import { ProductRow } from "../../types";
-import ProductsTableCore from "./ProductsTableCore";
+import { OrdersContext } from "../../contexts/OrdersContext";
+import { OrderRow } from "../../types";
+import OrdersTableCore from "./OrdersTableCore";
 
 interface TablePaginationActionsProps {
   count: number;
@@ -113,11 +113,11 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 
 function createData(
   id: number,
-  name: string,
-  description: string,
-  price: number
+  address: string,
+  delivery: string,
+  team: string
 ) {
-  return { id, name, description, price };
+  return { id, address, delivery, team };
 }
 
 const useStyles = makeStyles(() =>
@@ -136,26 +136,23 @@ const useStyles = makeStyles(() =>
   })
 );
 
-export default function ProductsTable() {
-  const noRows: ProductRow[] = [];
-  const { products } = useContext(ProductsContext);
+export default function OrdersTable() {
+  const noRows: OrderRow[] = [];
+  const { orders, pagination } = useContext(OrdersContext);
 
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(pagination.currentPage);
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [rows, setRows] = useState(noRows);
 
   useEffect(() => {
     const generateRows = () => {
-      const list: ProductRow[] = [];
+      const list: OrderRow[] = [];
 
-      for (const product of products) {
+      for (const order of orders) {
+        console.log(order.delivery);
+        
         list.push(
-          createData(
-            product.id,
-            product.name,
-            product.description,
-            product.price
-          )
+          createData(order.id, order.address, order.delivery, order.team.name)
         );
       }
 
@@ -164,7 +161,7 @@ export default function ProductsTable() {
 
     const rs = generateRows();
     setRows(rs);
-  }, [products, setRows]);
+  }, [orders, setRows]);
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -187,7 +184,7 @@ export default function ProductsTable() {
 
   return (
     <TableContainer className={classes.container} component={Paper}>
-      <h1 className={classes.title}>Produtos</h1>
+      <h1 className={classes.title}>Encomendas</h1>
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
         <colgroup>
           <col style={{ width: "30%" }} />
@@ -196,18 +193,18 @@ export default function ProductsTable() {
         </colgroup>
         <TableHead>
           <TableRow>
-            <StyledTableCell>Nome</StyledTableCell>
-            <StyledTableCell align="left">Descrição</StyledTableCell>
-            <StyledTableCell align="right">Preço (BRL)</StyledTableCell>
+            <StyledTableCell>Endereço</StyledTableCell>
+            <StyledTableCell align="right">Equipe</StyledTableCell>
+            <StyledTableCell align="right">Entregue</StyledTableCell>
           </TableRow>
         </TableHead>
 
-        <ProductsTableCore
+        <OrdersTableCore
           emptyRows={emptyRows}
           page={page}
           rows={rows}
           rowsPerPage={rowsPerPage}
-          products={products}
+          orders={orders}
         />
 
         <TableFooter>

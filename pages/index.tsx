@@ -2,7 +2,7 @@ import axios from "axios";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState, useCallback, useContext } from "react";
-import { Snackbar, Alert, AlertTitle } from "@mui/material";
+import { Snackbar, Alert, AlertTitle, Button } from "@mui/material";
 
 import styles from "../styles/Home.module.css";
 import Chart from "./components/Chart";
@@ -10,16 +10,21 @@ import Navbar from "./components/Navbar";
 import ProductsTable from "./components/ProductsTable";
 import { ProductsContext } from "../contexts/ProductsContext";
 import OrderBox from "./components/OrderBox";
+import { OrdersContext } from "../contexts/OrdersContext";
+import OrdersTable from "./components/OrdersTable";
 
 const Home: NextPage = () => {
   const { item, setProducts } = useContext(ProductsContext);
-
+  const { setOrders, setPagination } = useContext(OrdersContext);
+  
   const [isConnectedWithBackend, setIsConnectedWithBackend] = useState(true);
   const [isDatabaseEmpty, setIsDatabaseEmpty] = useState(false);
   const [seedingSucceeded, setSeedingSucceeded] = useState(false);
+  const [showOrders, setShowOrders] = useState(false);
 
   const homeURL = "https://localhost:7098/api/home";
   const productsURL = "https://localhost:7098/api/products";
+  const ordersURL = "https://localhost:7098/api/orders";
 
   const loadProducts = useCallback(async () => {
     try {
@@ -36,6 +41,25 @@ const Home: NextPage = () => {
     }
   }, [setProducts, setIsConnectedWithBackend]);
 
+  const loadOrders = useCallback(async () => {
+    try {
+      const response = await axios({
+        method: "get",
+        url: ordersURL,
+      });
+
+      if (response.status === 200) {
+        setOrders(response.data.orders);
+        setPagination({
+          pages: response.data.pages,
+          currentPage: response.data.currentPage,
+        });
+      }
+    } catch {
+      setIsConnectedWithBackend(false);
+    }
+  }, [setOrders, setPagination, setIsConnectedWithBackend]);
+
   const seed = useCallback(async () => {
     const response = await axios({
       method: "post",
@@ -45,8 +69,9 @@ const Home: NextPage = () => {
     if (response.status === 200) {
       setSeedingSucceeded(true);
       loadProducts();
+      loadOrders();
     }
-  }, [loadProducts]);
+  }, [loadProducts, loadOrders]);
 
   const requestHome = useCallback(async () => {
     try {
@@ -60,11 +85,12 @@ const Home: NextPage = () => {
         seed();
       } else if (response.status === 200) {
         loadProducts();
+        loadOrders();
       }
     } catch {
       setIsConnectedWithBackend(false);
     }
-  }, [seed, loadProducts]);
+  }, [seed, loadProducts, loadOrders]);
 
   const handleCloseDatabaseEmptyWarning = () => {
     setIsDatabaseEmpty(false);
@@ -93,7 +119,22 @@ const Home: NextPage = () => {
       <main className={styles.main}>
         <Chart />
         <div className={styles.productsSection}>
-          <ProductsTable />
+          {showOrders ? (
+            <Button
+              className={styles.switchButton}
+              onClick={() => setShowOrders(false)}
+            >
+              ver Produtos
+            </Button>
+          ) : (
+            <Button
+              className={styles.switchButton}
+              onClick={() => setShowOrders(true)}
+            >
+              ver Encomendas
+            </Button>
+          )}
+          {showOrders ? <OrdersTable /> : <ProductsTable />}
           {item.id !== 0 && <OrderBox item={item} />}
         </div>
       </main>

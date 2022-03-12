@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import { CartContextProps, CartContextType } from "../pages/types";
+import { CartContextProps, CartContextType } from "../types";
 
 const initial = {
   address: "",
