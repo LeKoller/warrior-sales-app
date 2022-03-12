@@ -16,7 +16,7 @@ import OrdersTable from "./components/OrdersTable";
 const Home: NextPage = () => {
   const { item, setProducts } = useContext(ProductsContext);
   const { setOrders, setPagination } = useContext(OrdersContext);
-  
+
   const [isConnectedWithBackend, setIsConnectedWithBackend] = useState(true);
   const [isDatabaseEmpty, setIsDatabaseEmpty] = useState(false);
   const [seedingSucceeded, setSeedingSucceeded] = useState(false);
@@ -41,24 +41,30 @@ const Home: NextPage = () => {
     }
   }, [setProducts, setIsConnectedWithBackend]);
 
-  const loadOrders = useCallback(async () => {
-    try {
-      const response = await axios({
-        method: "get",
-        url: ordersURL,
-      });
+  const loadOrders = useCallback(
+    async (page: number = 1, results: number = 20) => {
+      const url = `${ordersURL}?page=${page}&results=${results}`;
 
-      if (response.status === 200) {
-        setOrders(response.data.orders);
-        setPagination({
-          pages: response.data.pages,
-          currentPage: response.data.currentPage,
+      try {
+        const response = await axios({
+          method: "get",
+          url,
         });
+
+        if (response.status === 200) {
+          setOrders(response.data.orders);
+          setPagination({
+            pages: response.data.pages,
+            currentPage: response.data.currentPage - 1,
+            total: response.data.total,
+          });
+        }
+      } catch {
+        setIsConnectedWithBackend(false);
       }
-    } catch {
-      setIsConnectedWithBackend(false);
-    }
-  }, [setOrders, setPagination, setIsConnectedWithBackend]);
+    },
+    [setOrders, setPagination, setIsConnectedWithBackend]
+  );
 
   const seed = useCallback(async () => {
     const response = await axios({
@@ -100,6 +106,11 @@ const Home: NextPage = () => {
     setSeedingSucceeded(false);
   };
 
+  const handleShowOrders = () => {
+    loadOrders();
+    setShowOrders(true);
+  };
+
   useEffect(() => {
     requestHome();
   }, [requestHome]);
@@ -127,14 +138,15 @@ const Home: NextPage = () => {
               ver Produtos
             </Button>
           ) : (
-            <Button
-              className={styles.switchButton}
-              onClick={() => setShowOrders(true)}
-            >
+            <Button className={styles.switchButton} onClick={handleShowOrders}>
               ver Encomendas
             </Button>
           )}
-          {showOrders ? <OrdersTable /> : <ProductsTable />}
+          {showOrders ? (
+            <OrdersTable loadOrders={loadOrders} />
+          ) : (
+            <ProductsTable />
+          )}
           {item.id !== 0 && <OrderBox item={item} />}
         </div>
       </main>

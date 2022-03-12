@@ -23,16 +23,16 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function OrdersTableCore(props: IOrdersTableCore) {
-  const {emptyRows, page, rows, rowsPerPage, orders} = props;
-//   const {setItem} = useContext(ProductsContext)
+  const { emptyRows, page, rows, rowsPerPage, orders } = props;
+  //   const {setItem} = useContext(ProductsContext)
 
-//   const selectItem = (id: number) => {
-//     const item = orders.find(o => o.id === id)
-//     if (item) {
-//       setItem(item)
-//     }
-//   }
-  
+  //   const selectItem = (id: number) => {
+  //     const item = orders.find(o => o.id === id)
+  //     if (item) {
+  //       setItem(item)
+  //     }
+  //   }
+
   return (
     <TableBody>
       {rows.map((row) => (
@@ -48,11 +48,6 @@ function OrdersTableCore(props: IOrdersTableCore) {
           </TableCell>
         </StyledTableRow>
       ))}
-      {emptyRows > 0 && (
-        <TableRow style={{ height: 53 * emptyRows }}>
-          <TableCell colSpan={6} />
-        </TableRow>
-      )}
     </TableBody>
   );
 }

@@ -49,6 +49,21 @@ interface IOrdersTableCore {
 interface IPagination {
   pages: number;
   currentPage: number;
+  total: number;
+}
+
+interface ITablePaginationActionsProps {
+  count: number;
+  page: number;
+  rowsPerPage: number;
+  onPageChange: (
+    event: React.MouseEvent<HTMLButtonElement>,
+    newPage: number
+  ) => void;
+}
+
+interface IOrdersTableProps {
+  loadOrders: (page?: number, results?: number) => void;
 }
 
 type CartContextType = {
@@ -108,20 +123,22 @@ type OrderRow = {
 };
 
 export type {
+  IProduct,
+  IProductsTableCore,
+  IOrdersTableCore,
+  ICartItem,
+  IOrder,
+  ITeam,
+  ITablePaginationActionsProps,
+  IOrdersTableProps,
   CartContextType,
   CartContextProps,
   AuthContextType,
   AuthContextProps,
-  IProduct,
   ProductsContextType,
   ProductsContextProps,
   ProductRow,
   OrderRow,
-  IProductsTableCore,
-  IOrdersTableCore,
-  ICartItem,
   OrdersContextProps,
   OrdersContextType,
-  IOrder,
-  ITeam,
 };

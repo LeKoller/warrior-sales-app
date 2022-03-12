@@ -18,8 +18,9 @@ const initial = {
   orders: [emptyOrder],
   setOrders: () => {},
   pagination: {
-    pages: 0,
-    currentPage: 0,
+    pages: 1,
+    currentPage: 1,
+    total: 1,
   },
   setPagination: () => {},
 };

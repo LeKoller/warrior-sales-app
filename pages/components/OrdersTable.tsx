@@ -18,18 +18,12 @@ import LastPageIcon from "@mui/icons-material/LastPage";
 import theme from "../../styles/theme";
 import { TableHead } from "@mui/material";
 import { OrdersContext } from "../../contexts/OrdersContext";
-import { OrderRow } from "../../types";
+import {
+  ITablePaginationActionsProps,
+  OrderRow,
+  IOrdersTableProps,
+} from "../../types";
 import OrdersTableCore from "./OrdersTableCore";
-
-interface TablePaginationActionsProps {
-  count: number;
-  page: number;
-  rowsPerPage: number;
-  onPageChange: (
-    event: React.MouseEvent<HTMLButtonElement>,
-    newPage: number
-  ) => void;
-}
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -41,7 +35,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-function TablePaginationActions(props: TablePaginationActionsProps) {
+function TablePaginationActions(props: ITablePaginationActionsProps) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
 
@@ -136,7 +130,8 @@ const useStyles = makeStyles(() =>
   })
 );
 
-export default function OrdersTable() {
+export default function OrdersTable(props: IOrdersTableProps) {
+  const { loadOrders } = props;
   const noRows: OrderRow[] = [];
   const { orders, pagination } = useContext(OrdersContext);
 
@@ -149,8 +144,6 @@ export default function OrdersTable() {
       const list: OrderRow[] = [];
 
       for (const order of orders) {
-        console.log(order.delivery);
-        
         list.push(
           createData(order.id, order.address, order.delivery, order.team.name)
         );
@@ -163,13 +156,13 @@ export default function OrdersTable() {
     setRows(rs);
   }, [orders, setRows]);
 
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  const emptyRows = 0;
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
+    loadOrders(newPage + 1);
     setPage(newPage);
   };
 
@@ -212,7 +205,7 @@ export default function OrdersTable() {
             <TablePagination
               rowsPerPageOptions={[5, 10, 20, 50, 100]}
               colSpan={3}
-              count={rows.length}
+              count={pagination.total}
               rowsPerPage={rowsPerPage}
               page={page}
               SelectProps={{
