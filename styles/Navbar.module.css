@@ -1,0 +1,56 @@
+.nav {
+  display: flex;
+  padding: 2rem 4vw;
+  width: 100vw;
+  height: 100px;
+  border-bottom: 1px solid #eaeaea;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  background-color: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(8px);
+  z-index: 99;
+}
+
+.button {
+  background-color: #1254bf;
+  color: white;
+  width: 173px;
+  height: 48px;
+  box-sizing: border-box;
+  text-transform: capitalize;
+  font-weight: 300;
+  letter-spacing: 0.06rem;
+}
+
+.title {
+  font-family: "Roboto", sans-serif;
+  color: #59595a;
+  font-weight: 500;
+  font-size: 36px;
+}
+
+.titleSpan {
+  color: "#79797a";
+  font-weight: 300;
+}
+
+.auth {
+  position: relative;
+}
+
+.iconInvisible {
+  position: absolute;
+  left: -48px;
+  top: 8px;
+  transition: ease-in-out 0.5s;
+  opacity: 0;
+}
+
+.icon {
+  position: absolute;
+  left: -48px;
+  top: 8px;
+  transition: ease-in-out 0.5s;
+  opacity: 1;
+}
