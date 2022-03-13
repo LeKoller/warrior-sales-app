@@ -14,8 +14,13 @@ import { OrdersContext } from "../contexts/OrdersContext";
 import OrdersTable from "./components/OrdersTable";
 
 const Home: NextPage = () => {
-  const { item, setProducts } = useContext(ProductsContext);
-  const { setOrders, setPagination } = useContext(OrdersContext);
+  const {
+    item,
+    setProducts,
+    setPagination: setProductsPagination,
+  } = useContext(ProductsContext);
+  const { setOrders, setPagination: setOrdersPagination } =
+    useContext(OrdersContext);
 
   const [isConnectedWithBackend, setIsConnectedWithBackend] = useState(true);
   const [isDatabaseEmpty, setIsDatabaseEmpty] = useState(false);
@@ -26,20 +31,30 @@ const Home: NextPage = () => {
   const productsURL = "https://localhost:7098/api/products";
   const ordersURL = "https://localhost:7098/api/orders";
 
-  const loadProducts = useCallback(async () => {
-    try {
-      const response = await axios({
-        method: "get",
-        url: productsURL,
-      });
+  const loadProducts = useCallback(
+    async (page: number = 1, results: number = 20) => {
+      const url = `${productsURL}?page=${page}&results=${results}`;
 
-      if (response.status === 200) {
-        setProducts(response.data);
+      try {
+        const response = await axios({
+          method: "get",
+          url,
+        });
+
+        if (response.status === 200) {
+          setProducts(response.data.products);
+          setProductsPagination({
+            pages: response.data.pages,
+            currentPage: response.data.currentPage - 1,
+            total: response.data.total,
+          });
+        }
+      } catch {
+        setIsConnectedWithBackend(false);
       }
-    } catch {
-      setIsConnectedWithBackend(false);
-    }
-  }, [setProducts, setIsConnectedWithBackend]);
+    },
+    [setProducts, setIsConnectedWithBackend, setProductsPagination]
+  );
 
   const loadOrders = useCallback(
     async (page: number = 1, results: number = 20) => {
@@ -53,7 +68,7 @@ const Home: NextPage = () => {
 
         if (response.status === 200) {
           setOrders(response.data.orders);
-          setPagination({
+          setOrdersPagination({
             pages: response.data.pages,
             currentPage: response.data.currentPage - 1,
             total: response.data.total,
@@ -63,7 +78,7 @@ const Home: NextPage = () => {
         setIsConnectedWithBackend(false);
       }
     },
-    [setOrders, setPagination, setIsConnectedWithBackend]
+    [setOrders, setOrdersPagination, setIsConnectedWithBackend]
   );
 
   const seed = useCallback(async () => {
@@ -111,6 +126,11 @@ const Home: NextPage = () => {
     setShowOrders(true);
   };
 
+  const handleShowProducts = () => {
+    loadProducts();
+    setShowOrders(false);
+  };
+
   useEffect(() => {
     requestHome();
   }, [requestHome]);
@@ -133,7 +153,7 @@ const Home: NextPage = () => {
           {showOrders ? (
             <Button
               className={styles.switchButton}
-              onClick={() => setShowOrders(false)}
+              onClick={handleShowProducts}
             >
               ver Produtos
             </Button>
@@ -143,9 +163,9 @@ const Home: NextPage = () => {
             </Button>
           )}
           {showOrders ? (
-            <OrdersTable loadOrders={loadOrders} />
+            <OrdersTable loadData={loadOrders} />
           ) : (
-            <ProductsTable />
+            <ProductsTable loadData={loadProducts} />
           )}
           {item.id !== 0 && <OrderBox item={item} />}
         </div>

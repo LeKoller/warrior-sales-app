@@ -62,8 +62,8 @@ interface ITablePaginationActionsProps {
   ) => void;
 }
 
-interface IOrdersTableProps {
-  loadOrders: (page?: number, results?: number) => void;
+interface ITableProps {
+  loadData: (page?: number, results?: number) => void;
 }
 
 type CartContextType = {
@@ -83,6 +83,8 @@ type ProductsContextType = {
   setItem: (newItem: IProduct) => void;
   products: IProduct[];
   setProducts: (newProducts: IProduct[]) => void;
+  pagination: IPagination;
+  setPagination: (newPagination: IPagination) => void;
 };
 
 type OrdersContextType = {
@@ -130,7 +132,7 @@ export type {
   IOrder,
   ITeam,
   ITablePaginationActionsProps,
-  IOrdersTableProps,
+  ITableProps,
   CartContextType,
   CartContextProps,
   AuthContextType,

@@ -1,0 +1,12 @@
+.container {
+  width: 100%;
+  padding: 0 8px 8px 8px;
+}
+
+.title {
+  font-family: "Roboto", sans-serif;
+  color: #59595a;
+  font-weight: 400;
+  font-size: 24px;
+  margin-left: 12px;
+}

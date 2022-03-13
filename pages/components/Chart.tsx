@@ -7,27 +7,10 @@ import {
 } from "@devexpress/dx-react-chart-material-ui";
 import { Animation } from "@devexpress/dx-react-chart";
 
-import theme from "../../styles/theme";
-import { createStyles, makeStyles } from "@mui/styles";
+import styles from "../../styles/Chart.module.css";
 import { OrdersContext } from "../../contexts/OrdersContext";
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    container: {
-      padding: "0 16px",
-    },
-    title: {
-      font: theme.typography.fontFamily,
-      color: theme.palette.grey[800],
-      fontWeight: 400,
-      fontSize: "24px",
-      marginLeft: "16px",
-    },
-  })
-);
-
 function PieChart() {
-  const classes = useStyles();
   const initialChartData = [
     { team: "Platinum", orders: 1 },
     { team: "Diamond", orders: 1 },
@@ -69,8 +52,8 @@ function PieChart() {
 
   return (
     <Paper style={{ width: "40%" }}>
-      <h1 className={classes.title}>Encomendas por equipe</h1>
-      <div className={classes.container}>
+      <h1 className={styles.title}>Encomendas por equipe</h1>
+      <div className={styles.container}>
         <Chart data={chartData}>
           <PieSeries valueField="orders" argumentField="team" />
           <Legend />

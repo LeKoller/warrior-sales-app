@@ -15,21 +15,15 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 
-import theme from "../../styles/theme";
+import styles from "../../styles/Tables.module.css";
 import { TableHead } from "@mui/material";
 import { ProductsContext } from "../../contexts/ProductsContext";
-import { ProductRow } from "../../types";
+import {
+  ITablePaginationActionsProps,
+  ITableProps,
+  ProductRow,
+} from "../../types";
 import ProductsTableCore from "./ProductsTableCore";
-
-interface TablePaginationActionsProps {
-  count: number;
-  page: number;
-  rowsPerPage: number;
-  onPageChange: (
-    event: React.MouseEvent<HTMLButtonElement>,
-    newPage: number
-  ) => void;
-}
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -41,7 +35,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-function TablePaginationActions(props: TablePaginationActionsProps) {
+function TablePaginationActions(props: ITablePaginationActionsProps) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
 
@@ -120,27 +114,12 @@ function createData(
   return { id, name, description, price };
 }
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    container: {
-      width: "100%",
-      padding: "0 8px 8px 8px",
-    },
-    title: {
-      font: theme.typography.fontFamily,
-      color: theme.palette.grey[800],
-      fontWeight: 400,
-      fontSize: "24px",
-      marginLeft: "12px",
-    },
-  })
-);
-
-export default function ProductsTable() {
+export default function ProductsTable(props: ITableProps) {
+  const { loadData } = props;
   const noRows: ProductRow[] = [];
-  const { products } = useContext(ProductsContext);
+  const { products, pagination } = useContext(ProductsContext);
 
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(pagination.currentPage);
   const [rowsPerPage, setRowsPerPage] = useState(20);
   const [rows, setRows] = useState(noRows);
 
@@ -166,28 +145,29 @@ export default function ProductsTable() {
     setRows(rs);
   }, [products, setRows]);
 
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  const emptyRows = 0;
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
+    loadData(newPage + 1);
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    const parsedRowsPerPage = parseInt(event.target.value, 10);
+
+    loadData(1, parsedRowsPerPage)
+    setRowsPerPage(parsedRowsPerPage);
     setPage(0);
   };
 
-  const classes = useStyles();
-
   return (
-    <TableContainer className={classes.container} component={Paper}>
-      <h1 className={classes.title}>Produtos</h1>
+    <TableContainer className={styles.container} component={Paper}>
+      <h1 className={styles.title}>Produtos</h1>
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
         <colgroup>
           <col style={{ width: "30%" }} />
@@ -224,6 +204,7 @@ export default function ProductsTable() {
                 },
                 native: true,
               }}
+              labelRowsPerPage={"Linhas por página:"}
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
               ActionsComponent={TablePaginationActions}

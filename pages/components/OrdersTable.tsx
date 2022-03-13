@@ -15,13 +15,13 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 
-import theme from "../../styles/theme";
+import styles from "../../styles/Tables.module.css";
 import { TableHead } from "@mui/material";
 import { OrdersContext } from "../../contexts/OrdersContext";
 import {
   ITablePaginationActionsProps,
   OrderRow,
-  IOrdersTableProps,
+  ITableProps,
 } from "../../types";
 import OrdersTableCore from "./OrdersTableCore";
 
@@ -114,24 +114,8 @@ function createData(
   return { id, address, delivery, team };
 }
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    container: {
-      width: "100%",
-      padding: "0 8px 8px 8px",
-    },
-    title: {
-      font: theme.typography.fontFamily,
-      color: theme.palette.grey[800],
-      fontWeight: 400,
-      fontSize: "24px",
-      marginLeft: "12px",
-    },
-  })
-);
-
-export default function OrdersTable(props: IOrdersTableProps) {
-  const { loadOrders } = props;
+export default function OrdersTable(props: ITableProps) {
+  const { loadData } = props;
   const noRows: OrderRow[] = [];
   const { orders, pagination } = useContext(OrdersContext);
 
@@ -162,7 +146,7 @@ export default function OrdersTable(props: IOrdersTableProps) {
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
-    loadOrders(newPage + 1);
+    loadData(newPage + 1);
     setPage(newPage);
   };
 
@@ -171,16 +155,14 @@ export default function OrdersTable(props: IOrdersTableProps) {
   ) => {
     const parsedRowsPerPage = parseInt(event.target.value, 10);
 
-    loadOrders(1, parsedRowsPerPage)
+    loadData(1, parsedRowsPerPage)
     setRowsPerPage(parsedRowsPerPage);
     setPage(0);
   };
 
-  const classes = useStyles();
-
   return (
-    <TableContainer className={classes.container} component={Paper}>
-      <h1 className={classes.title}>Encomendas</h1>
+    <TableContainer className={styles.container} component={Paper}>
+      <h1 className={styles.title}>Encomendas</h1>
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
         <colgroup>
           <col style={{ width: "30%" }} />
@@ -217,6 +199,7 @@ export default function OrdersTable(props: IOrdersTableProps) {
                 },
                 native: true,
               }}
+              labelRowsPerPage={"Linhas por página:"}
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
               ActionsComponent={TablePaginationActions}

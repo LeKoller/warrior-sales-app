@@ -15,6 +15,12 @@ const initial = {
   setItem: () => {},
   products: [emptyProduct],
   setProducts: () => {},
+  pagination: {
+    pages: 0,
+    currentPage: 0,
+    total: 0,
+  },
+  setPagination: () => {},
 };
 
 const ProductsContext = createContext<ProductsContextType>(initial);
@@ -22,6 +28,7 @@ const ProductsContext = createContext<ProductsContextType>(initial);
 const ProductsContextProvider = ({ children }: ProductsContextProps) => {
   const [item, setItem] = useState(initial.item);
   const [products, setProducts] = useState(initial.products);
+  const [pagination, setPagination] = useState(initial.pagination);
 
   return (
     <ProductsContext.Provider
@@ -30,6 +37,8 @@ const ProductsContextProvider = ({ children }: ProductsContextProps) => {
         setItem,
         products,
         setProducts,
+        pagination,
+        setPagination,
       }}
     >
       {children}
