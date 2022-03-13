@@ -169,7 +169,10 @@ export default function OrdersTable(props: IOrdersTableProps) {
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    const parsedRowsPerPage = parseInt(event.target.value, 10);
+
+    loadOrders(1, parsedRowsPerPage)
+    setRowsPerPage(parsedRowsPerPage);
     setPage(0);
   };
 
