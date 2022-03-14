@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
 import { TableBody, TableCell, TableRow } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { IOrdersTableCore } from "../../types";
-import { ProductsContext } from "../../contexts/ProductsContext";
+import styles from "../../styles/Tables.module.css";
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
@@ -23,27 +23,19 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function OrdersTableCore(props: IOrdersTableCore) {
-  const { emptyRows, page, rows, rowsPerPage, orders } = props;
-  //   const {setItem} = useContext(ProductsContext)
-
-  //   const selectItem = (id: number) => {
-  //     const item = orders.find(o => o.id === id)
-  //     if (item) {
-  //       setItem(item)
-  //     }
-  //   }
+  const { rows } = props;
 
   return (
     <TableBody>
       {rows.map((row) => (
         <StyledTableRow key={row.id} onClick={() => {}}>
-          <TableCell component="th" scope="row">
+          <TableCell className={styles.tableCell} component="th" scope="row">
             {row.address}
           </TableCell>
-          <TableCell style={{ width: 160 }} align="right">
+          <TableCell className={styles.tableCell} style={{ width: 160 }} align="right">
             {row.team}
           </TableCell>
-          <TableCell style={{ width: 160 }} align="right">
+          <TableCell className={styles.tableCell} style={{ width: 160 }} align="right">
             {row.delivery ? row.delivery : "Não"}
           </TableCell>
         </StyledTableRow>

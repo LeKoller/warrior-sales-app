@@ -53,3 +53,28 @@
   top: 8px;
   right: 12px;
 }
+
+
+@media (max-width: 720px) {
+  .button {
+    padding: 10px 12px;
+    margin-bottom: 18px;
+    position: relative;
+    font-size: small;
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 540px) {
+  .button {
+    font-size: smaller;
+    margin-right: 18px;
+  }
+
+  .box {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-column-gap: 8px;
+    padding-right: 6px;
+  }
+}

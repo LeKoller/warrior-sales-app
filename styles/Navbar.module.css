@@ -54,3 +54,86 @@
   transition: ease-in-out 0.5s;
   opacity: 1;
 }
+
+.logo {
+  opacity: 1;
+  transition: ease-in-out 0.5s;
+}
+
+@media (max-width: 760px) {
+  .logo {
+    opacity: 0;
+    transition: ease-in-out 0.5s;
+    position: absolute;
+  }
+
+  .nav {
+    height: 64px;
+  }
+
+  .title {
+    font-size: 24px;
+    margin-right: 64px;
+  }
+
+  .auth {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .button {
+    width: 128px;
+    height: 36px;
+  }
+
+  .icon {
+    position: relative;
+    left: -12px;
+    top: 0;
+
+    transition: ease-in-out 0.5s;
+    opacity: 1;
+  }
+
+}
+
+@media (max-width: 420px) {
+  .title {
+    font-size: 18px;
+    margin-right: 36px;
+  }
+
+  .button {
+    width: 100px;
+    height: 30px;
+  }
+
+  .icon {
+    top: 4px;
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 300px) {
+  .title {
+    margin-right: 24px;
+  }
+
+  .button {
+    width: 84px;
+    height: 28px;
+    background-color: transparent;
+    color: #1254bf;
+    box-shadow: none;
+  }
+  .button:focus {
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  .icon {
+    top: 2px;
+    left: -8px;
+    font-size: 24px;
+  }
+}

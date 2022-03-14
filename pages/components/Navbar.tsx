@@ -2,12 +2,12 @@ import React, { useContext, useState } from "react";
 import Image from "next/image";
 import { Button } from "@mui/material";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import axios from "axios";
 
 import logo from "../../assets/logo.svg";
 import styles from "../../styles/Navbar.module.css";
 import { AuthContext } from "../../contexts/AuthContext";
-import axios from "axios";
 
 function Navbar() {
   const { setToken, token } = useContext(AuthContext);
@@ -30,7 +30,7 @@ function Navbar() {
 
   return (
     <nav className={styles.nav}>
-      <div>
+      <div className={styles.logo}>
         <Image src={logo} alt="wa-project logo" />
       </div>
       <div>

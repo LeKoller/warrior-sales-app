@@ -154,7 +154,7 @@ export default function OrdersTable(props: ITableProps) {
   ) => {
     const parsedRowsPerPage = parseInt(event.target.value, 10);
 
-    loadData(1, parsedRowsPerPage)
+    loadData(1, parsedRowsPerPage);
     setRowsPerPage(parsedRowsPerPage);
     setPage(0);
   };
@@ -162,7 +162,7 @@ export default function OrdersTable(props: ITableProps) {
   return (
     <TableContainer className={styles.container} component={Paper}>
       <h1 className={styles.title}>Encomendas</h1>
-      <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+      <Table className={styles.table} aria-label="custom pagination table">
         <colgroup>
           <col style={{ width: "30%" }} />
           <col style={{ width: "50%" }} />
@@ -170,9 +170,15 @@ export default function OrdersTable(props: ITableProps) {
         </colgroup>
         <TableHead>
           <TableRow>
-            <StyledTableCell>Endereço</StyledTableCell>
-            <StyledTableCell align="right">Equipe</StyledTableCell>
-            <StyledTableCell align="right">Entregue</StyledTableCell>
+            <StyledTableCell className={styles.tableCell}>
+              Endereço
+            </StyledTableCell>
+            <StyledTableCell className={styles.tableCell} align="right">
+              Equipe
+            </StyledTableCell>
+            <StyledTableCell className={styles.tableCell} align="right">
+              Entregue
+            </StyledTableCell>
           </TableRow>
         </TableHead>
 
@@ -187,6 +193,7 @@ export default function OrdersTable(props: ITableProps) {
         <TableFooter>
           <TableRow>
             <TablePagination
+              className={styles.table}
               rowsPerPageOptions={[5, 10, 20, 50, 100]}
               colSpan={3}
               count={pagination.total}

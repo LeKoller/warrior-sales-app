@@ -10,3 +10,18 @@
   font-size: 24px;
   margin-left: 12px;
 }
+
+.table {
+  overflow: auto;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.table::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 540px) {
+  .tableCell {
+    font-size: 10px;
+  }
+}

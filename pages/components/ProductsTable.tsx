@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useTheme, styled } from "@mui/material/styles";
-import { createStyles, makeStyles } from "@mui/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
@@ -14,9 +13,9 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
+import { TableHead } from "@mui/material";
 
 import styles from "../../styles/Tables.module.css";
-import { TableHead } from "@mui/material";
 import { ProductsContext } from "../../contexts/ProductsContext";
 import {
   ITablePaginationActionsProps,
@@ -160,7 +159,7 @@ export default function ProductsTable(props: ITableProps) {
   ) => {
     const parsedRowsPerPage = parseInt(event.target.value, 10);
 
-    loadData(1, parsedRowsPerPage)
+    loadData(1, parsedRowsPerPage);
     setRowsPerPage(parsedRowsPerPage);
     setPage(0);
   };
@@ -168,7 +167,7 @@ export default function ProductsTable(props: ITableProps) {
   return (
     <TableContainer className={styles.container} component={Paper}>
       <h1 className={styles.title}>Produtos</h1>
-      <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+      <Table className={styles.table} aria-label="custom pagination table">
         <colgroup>
           <col style={{ width: "30%" }} />
           <col style={{ width: "50%" }} />
@@ -176,9 +175,13 @@ export default function ProductsTable(props: ITableProps) {
         </colgroup>
         <TableHead>
           <TableRow>
-            <StyledTableCell>Nome</StyledTableCell>
-            <StyledTableCell align="left">Descrição</StyledTableCell>
-            <StyledTableCell align="right">Preço (BRL)</StyledTableCell>
+            <StyledTableCell className={styles.tableCell}>Nome</StyledTableCell>
+            <StyledTableCell className={styles.tableCell} align="left">
+              Descrição
+            </StyledTableCell>
+            <StyledTableCell className={styles.tableCell} align="right">
+              Preço (BRL)
+            </StyledTableCell>
           </TableRow>
         </TableHead>
 
@@ -193,6 +196,7 @@ export default function ProductsTable(props: ITableProps) {
         <TableFooter>
           <TableRow>
             <TablePagination
+              className={styles.table}
               rowsPerPageOptions={[5, 10, 20, 50, 100]}
               colSpan={3}
               count={rows.length}

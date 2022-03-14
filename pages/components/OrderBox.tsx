@@ -165,7 +165,7 @@ export default function TextFieldSizes(props: {
   return (
     <Paper className={item.id ? styles.container : styles.containerInvisible}>
       <div className={styles.top}>
-        <h1 className={styles.title}>Encomendar</h1>
+        <h1 className={styles.title}>{createProductMode ? "Cadastrar" : "Encomendar"}</h1>
         <Button className={styles.switchButton} onClick={toggleMode}>
           {createProductMode ? "fazer encomenda" : "Cadastrar produto"}
         </Button>

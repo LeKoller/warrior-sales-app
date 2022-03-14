@@ -1,3 +1,8 @@
+.paper {
+  margin-bottom: 16px;
+  width: 40%;
+}
+
 .container {
   padding: 0 16px;
 }
@@ -8,4 +13,17 @@
   font-weight: 400;
   font-size: 24px;
   margin-left: 24px;
+}
+
+@media (max-width: 1000px) {
+  .paper {
+    width: 100%;    
+  }
+}
+
+@media (max-width: 420px) {
+  .paper {
+    visibility: hidden;
+    position: absolute; 
+  }
 }

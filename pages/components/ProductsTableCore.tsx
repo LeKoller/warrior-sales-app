@@ -4,6 +4,7 @@ import { styled } from "@mui/material/styles";
 
 import { IProductsTableCore } from "../../types";
 import { ProductsContext } from "../../contexts/ProductsContext";
+import styles from "../../styles/Tables.module.css"
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
@@ -40,13 +41,13 @@ function ProductsTableCore(props: IProductsTableCore) {
         : rows
       ).map((row) => (
         <StyledTableRow key={row.id} onClick={() => selectItem(row.id)}>
-          <TableCell component="th" scope="row">
+          <TableCell className={styles.tableCell} component="th" scope="row">
             {row.name}
           </TableCell>
-          <TableCell style={{ width: 160 }} align="left">
+          <TableCell className={styles.tableCell} style={{ width: 160 }} align="left">
             {row.description}
           </TableCell>
-          <TableCell style={{ width: 160 }} align="right">
+          <TableCell className={styles.tableCell} style={{ width: 160 }} align="right">
             {row.price.toFixed(2).replace(".", ",")}
           </TableCell>
         </StyledTableRow>

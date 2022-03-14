@@ -51,7 +51,7 @@ function PieChart() {
   }, [orders]);
 
   return (
-    <Paper style={{ width: "40%" }}>
+    <Paper className={styles.paper}>
       <h1 className={styles.title}>Encomendas por equipe</h1>
       <div className={styles.container}>
         <Chart data={chartData}>
