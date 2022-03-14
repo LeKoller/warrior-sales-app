@@ -36,6 +36,17 @@ export default function TextFieldSizes(props: {
   const [newProductDescription, setNewProductDescription] = useState("");
   const [hasCreatedProduct, setHasCreatedProduct] = useState(false);
 
+  const ordersURL = "https://localhost:7098/api/orders";
+  const productsURL = "https://localhost:7098/api/products";
+
+  const clearNewProduct = () => {
+    setNewProductName("");
+    setNewProductPrice("");
+    setNewProductCategory("");
+    setNewProductDescription("");
+    setQuantity(1);
+  };
+
   const addToCart = () => {
     const cartItem: ICartItem = {
       id: item.id,
@@ -46,9 +57,6 @@ export default function TextFieldSizes(props: {
     setCart([...cart, cartItem]);
     setItems([...cart, cartItem]);
   };
-
-  const ordersURL = "https://localhost:7098/api/orders";
-  const productsURL = "https://localhost:7098/api/products";
 
   const setNoTokenAlert = () => {
     setErrorTitle("Não autenticado");
@@ -115,9 +123,9 @@ export default function TextFieldSizes(props: {
   };
 
   const createProduct = async () => {
-    const parsedPrice = parseFloat(newProductPrice.replace(",", ".").replace(".", "")).toFixed(
-      2
-    );
+    const parsedPrice = parseFloat(
+      newProductPrice.replace(",", ".").replace(".", "")
+    ).toFixed(2);
     const newProduct = {
       name: newProductName,
       price: parsedPrice,
@@ -142,6 +150,7 @@ export default function TextFieldSizes(props: {
             "Logo mais será encontrado na lista de produtos e poderá ser vendido."
           );
           setHasCreatedProduct(true);
+          clearNewProduct();
         }
       } catch {
         setErrorTitle("Não foi possível cadastrar o produto");
@@ -165,7 +174,9 @@ export default function TextFieldSizes(props: {
   return (
     <Paper className={item.id ? styles.container : styles.containerInvisible}>
       <div className={styles.top}>
-        <h1 className={styles.title}>{createProductMode ? "Cadastrar" : "Encomendar"}</h1>
+        <h1 className={styles.title}>
+          {createProductMode ? "Cadastrar" : "Encomendar"}
+        </h1>
         <Button className={styles.switchButton} onClick={toggleMode}>
           {createProductMode ? "fazer encomenda" : "Cadastrar produto"}
         </Button>
