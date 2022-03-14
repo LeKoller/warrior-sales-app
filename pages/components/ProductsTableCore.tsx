@@ -39,7 +39,7 @@ function ProductsTableCore(props: IProductsTableCore) {
         ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
         : rows
       ).map((row) => (
-        <StyledTableRow key={row.name} onClick={() => selectItem(row.id)}>
+        <StyledTableRow key={row.id} onClick={() => selectItem(row.id)}>
           <TableCell component="th" scope="row">
             {row.name}
           </TableCell>
@@ -47,7 +47,7 @@ function ProductsTableCore(props: IProductsTableCore) {
             {row.description}
           </TableCell>
           <TableCell style={{ width: 160 }} align="right">
-            {row.price.toFixed(2)}
+            {row.price.toFixed(2).replace(".", ",")}
           </TableCell>
         </StyledTableRow>
       ))}

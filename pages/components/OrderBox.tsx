@@ -115,7 +115,9 @@ export default function TextFieldSizes(props: {
   };
 
   const createProduct = async () => {
-    const parsedPrice = parseFloat(newProductPrice).toFixed(2);
+    const parsedPrice = parseFloat(newProductPrice.replace(",", ".").replace(".", "")).toFixed(
+      2
+    );
     const newProduct = {
       name: newProductName,
       price: parsedPrice,
@@ -123,6 +125,8 @@ export default function TextFieldSizes(props: {
       description: newProductDescription,
       stock: quantity,
     };
+
+    console.log(parsedPrice);
 
     if (token) {
       try {
@@ -202,7 +206,7 @@ export default function TextFieldSizes(props: {
           }}
         />
         <TextField
-          label="Quantidade"
+          label={createProductMode ? "Estoque" : "Quantidade"}
           id="filled-size-normal"
           defaultValue={1}
           value={quantity > 0 ? quantity : 1}
