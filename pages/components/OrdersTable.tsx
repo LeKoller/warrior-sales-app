@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useTheme, styled } from "@mui/material/styles";
-import { createStyles, makeStyles } from "@mui/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
@@ -193,12 +192,6 @@ export default function OrdersTable(props: ITableProps) {
               count={pagination.total}
               rowsPerPage={rowsPerPage}
               page={page}
-              SelectProps={{
-                inputProps: {
-                  "aria-label": "rows per page",
-                },
-                native: true,
-              }}
               labelRowsPerPage={"Linhas por página:"}
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}

@@ -167,7 +167,7 @@ const Home: NextPage = () => {
           ) : (
             <ProductsTable loadData={loadProducts} />
           )}
-          {item.id !== 0 && <OrderBox item={item} />}
+          <OrderBox loadProducts={loadProducts} item={item} />
         </div>
       </main>
 

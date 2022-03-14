@@ -10,11 +10,15 @@ import { CartContext } from "../../contexts/CartContext";
 import { AuthContext } from "../../contexts/AuthContext";
 import axios from "axios";
 
-export default function TextFieldSizes(props: { item: IProduct }) {
-  const { item } = props;
+export default function TextFieldSizes(props: {
+  item: IProduct;
+  loadProducts: () => void;
+}) {
+  const { item, loadProducts } = props;
 
   const { address, setAddress, items, setItems } = useContext(CartContext);
   const { token } = useContext(AuthContext);
+
   const [quantity, setQuantity] = useState(1);
   const [cart, setCart] = useState(items.filter((i) => i.id !== 0));
   const [hasOrderFailed, setHasOrderFailed] = useState(false);
@@ -22,6 +26,15 @@ export default function TextFieldSizes(props: { item: IProduct }) {
   const [hasCreatedOrder, setHasCreatedOrder] = useState(false);
   const [errorTitle, setErrorTitle] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [successTitle, setSuccessTitle] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
+  const [createProductMode, setCreateProductMode] = useState(false);
+  const [newProductName, setNewProductName] = useState("");
+  const [newProductPrice, setNewProductPrice] = useState("");
+  const [newProductCategory, setNewProductCategory] = useState("");
+  const [newProductDescription, setNewProductDescription] = useState("");
+  const [hasCreatedProduct, setHasCreatedProduct] = useState(false);
 
   const addToCart = () => {
     const cartItem: ICartItem = {
@@ -35,6 +48,15 @@ export default function TextFieldSizes(props: { item: IProduct }) {
   };
 
   const ordersURL = "https://localhost:7098/api/orders";
+  const productsURL = "https://localhost:7098/api/products";
+
+  const setNoTokenAlert = () => {
+    setErrorTitle("Não autenticado");
+    setErrorMessage(
+      "É necessário do token de autenticação para completar algumas requisições. Clique botão no canto superior direito da tela para simular o login e obter o token."
+    );
+    setCouldNotSendOrder(true);
+  };
 
   const makeOrder = async () => {
     errorAlertCloseHandler();
@@ -53,6 +75,11 @@ export default function TextFieldSizes(props: { item: IProduct }) {
 
         if (response.status === 201) {
           const emptyItems = [{ id: 0, name: "", quantity: 0 }];
+
+          setSuccessTitle("Encomenda criada!");
+          setSuccessMessage(
+            "Suas informações estarão disponíveis na tabela das encomendas."
+          );
           setHasCreatedOrder(true);
           setItems(emptyItems);
           setCart(emptyItems.filter((i) => i.id !== 0));
@@ -62,7 +89,7 @@ export default function TextFieldSizes(props: { item: IProduct }) {
       } catch {
         setErrorTitle("Não foi possível criar a encomenda");
         setErrorMessage(
-          "Pode ser que ele não esteja ligado em sua máquina ou algo tenha dado errado."
+          "Pode ser que o servidor não esteja ligado em sua máquina ou algo tenha dado errado."
         );
         setHasOrderFailed(true);
       }
@@ -73,11 +100,7 @@ export default function TextFieldSizes(props: { item: IProduct }) {
       );
       setCouldNotSendOrder(true);
     } else if (!token) {
-      setErrorTitle("Não autenticado");
-      setErrorMessage(
-        "É necessário do token de autenticação para completar algumas requisições. Clique botão no canto superior direito da tela para simular o login e obter o token."
-      );
-      setCouldNotSendOrder(true);
+      setNoTokenAlert();
     }
   };
 
@@ -88,10 +111,61 @@ export default function TextFieldSizes(props: { item: IProduct }) {
 
   const successCloseHandler = () => {
     setHasCreatedOrder(false);
+    setHasCreatedProduct(false);
+  };
+
+  const createProduct = async () => {
+    const parsedPrice = parseFloat(newProductPrice).toFixed(2);
+    const newProduct = {
+      name: newProductName,
+      price: parsedPrice,
+      category: newProductCategory,
+      description: newProductDescription,
+      stock: quantity,
+    };
+
+    if (token) {
+      try {
+        const response = await axios.post(productsURL, newProduct, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 201) {
+          setSuccessTitle("Produto cadastrado");
+          setSuccessMessage(
+            "Logo mais será encontrado na lista de produtos e poderá ser vendido."
+          );
+          setHasCreatedProduct(true);
+        }
+      } catch {
+        setErrorTitle("Não foi possível cadastrar o produto");
+        setErrorMessage(
+          "Pode ser que o servidor não esteja ligado em sua máquina ou algo tenha dado errado na construção do produto."
+        );
+        setHasOrderFailed(true);
+        loadProducts();
+      }
+    } else {
+      setNoTokenAlert();
+    }
+  };
+
+  const toggleMode = () => {
+    createProductMode
+      ? setCreateProductMode(false)
+      : setCreateProductMode(true);
   };
 
   return (
-    <Paper className={styles.container}>
+    <Paper className={item.id ? styles.container : styles.containerInvisible}>
+      <div className={styles.top}>
+        <h1 className={styles.title}>Encomendar</h1>
+        <Button className={styles.switchButton} onClick={toggleMode}>
+          {createProductMode ? "fazer encomenda" : "Cadastrar produto"}
+        </Button>
+      </div>
       <Box
         component="form"
         sx={{
@@ -105,17 +179,27 @@ export default function TextFieldSizes(props: { item: IProduct }) {
           label="Produto"
           id="filled-size-normal"
           defaultValue={item.name}
-          value={item.name}
+          value={createProductMode ? newProductName : item.name}
           variant="filled"
-          disabled
+          disabled={!createProductMode}
+          onChange={(event) => {
+            createProductMode ? setNewProductName(event.target.value) : {};
+          }}
         />
         <TextField
           label="Valor (BRL)"
           id="filled-size-normal"
           defaultValue={item.price.toFixed(2)}
-          value={(quantity * item.price).toFixed(2)}
+          value={
+            createProductMode
+              ? newProductPrice
+              : (quantity * item.price).toFixed(2)
+          }
           variant="filled"
-          disabled
+          disabled={!createProductMode}
+          onChange={(event) => {
+            createProductMode ? setNewProductPrice(event.target.value) : {};
+          }}
         />
         <TextField
           label="Quantidade"
@@ -129,29 +213,49 @@ export default function TextFieldSizes(props: { item: IProduct }) {
           }}
         />
         <TextField
-          label="Endereço"
+          label={createProductMode ? "Categoria" : "Endereço"}
           id="filled-size-normal"
           defaultValue={address}
-          value={address}
+          value={createProductMode ? newProductCategory : address}
           variant="filled"
           onChange={(event) => {
-            setAddress(event.target.value);
+            createProductMode
+              ? setNewProductCategory(event.target.value)
+              : setAddress(event.target.value);
           }}
         />
+        {createProductMode ? (
+          <TextField
+            label="Descrição"
+            id="filled-size-normal"
+            defaultValue={address}
+            value={createProductMode ? newProductDescription : address}
+            variant="filled"
+            onChange={(event) => {
+              setNewProductDescription(event.target.value);
+            }}
+          />
+        ) : (
+          <Button
+            className={styles.button}
+            onClick={makeOrder}
+            disabled={!cart.length}
+          >
+            Encomendar
+          </Button>
+        )}
         <Button
           className={styles.button}
-          onClick={makeOrder}
-          disabled={!cart.length}
+          onClick={createProductMode ? createProduct : addToCart}
         >
-          Encomendar
-        </Button>
-        <Button className={styles.button} onClick={addToCart}>
-          Adicionar ao Carrinho({cart.length})
+          {createProductMode
+            ? "Efetuar cadastro"
+            : `Adicionar ao Carrinho(${cart.length})`}
         </Button>
       </Box>
 
       <Snackbar
-        open={hasCreatedOrder}
+        open={hasCreatedOrder || hasCreatedProduct}
         onClose={successCloseHandler}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         autoHideDuration={6000}
@@ -161,8 +265,8 @@ export default function TextFieldSizes(props: { item: IProduct }) {
           variant="filled"
           onClose={successCloseHandler}
         >
-          <AlertTitle>Encomenda criada!</AlertTitle>
-          Suas informações estarão disponíveis na tabela das encomendas.
+          <AlertTitle>{successTitle}</AlertTitle>
+          {successMessage}
         </Alert>
       </Snackbar>
 
