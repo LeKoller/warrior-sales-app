@@ -40,6 +40,7 @@
   justify-content: space-between;
   width: 100%;
   padding-top: 12px;
+  position: relative;
 }
 
 .switchButton {
@@ -54,6 +55,41 @@
   right: 12px;
 }
 
+.clearCartButton {
+  width: 173px;
+  height: 48px;
+  box-sizing: border-box;
+  text-transform: capitalize;
+  font-weight: 300;
+  font-size: 16px;
+  letter-spacing: .06rem;
+  top: 8px;
+  right: 12px;
+
+  opacity: 1;
+  transition: ease-in-out 0.5s;
+}
+
+.clearCartButtonInvisible {
+  width: 173px;
+  height: 48px;
+  box-sizing: border-box;
+  text-transform: capitalize;
+  font-weight: 300;
+  font-size: 16px;
+  letter-spacing: .06rem;
+  top: 8px;
+  right: 12px;
+  position: absolute;
+  
+
+  opacity: 0;
+  transition: ease-in-out 0.5s;
+}
+
+.buttons {
+  position: inherit;
+}
 
 @media (max-width: 720px) {
   .button {
@@ -76,5 +112,28 @@
     grid-template-columns: 1fr;
     grid-column-gap: 8px;
     padding-right: 6px;
+  }
+
+  .title {
+    position: relative;
+    font-size: 16px;
+    top: 7px;
+  }
+
+  .buttons {
+    margin: 0 auto;
+    margin-right: 12px;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    font-size: small;
+  }
+
+  .switchButton {
+    font-size: small;
+  }
+  
+  .clearCartButton {
+    font-size: small;
   }
 }

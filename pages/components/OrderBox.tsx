@@ -137,8 +137,6 @@ export default function TextFieldSizes(props: {
       stock: quantity,
     };
 
-    console.log(parsedPrice);
-
     if (token) {
       try {
         const response = await axios.post(productsURL, newProduct, {
@@ -174,15 +172,32 @@ export default function TextFieldSizes(props: {
       : setCreateProductMode(true);
   };
 
+  const handleClearCart = () => {
+    setCart([]);
+  };
+
   return (
     <Paper className={item.id ? styles.container : styles.containerInvisible}>
       <div className={styles.top}>
         <h1 className={styles.title}>
           {createProductMode ? "Cadastrar" : "Encomendar"}
         </h1>
-        <Button className={styles.switchButton} onClick={toggleMode}>
-          {createProductMode ? "fazer encomenda" : "Cadastrar produto"}
-        </Button>
+        <div className={styles.buttons}>
+          <Button
+            color="secondary"
+            className={
+              createProductMode
+                ? styles.clearCartButtonInvisible
+                : styles.clearCartButton
+            }
+            onClick={handleClearCart}
+          >
+            limpar carrinho
+          </Button>
+          <Button className={styles.switchButton} onClick={toggleMode}>
+            {createProductMode ? "fazer encomenda" : "Cadastrar produto"}
+          </Button>
+        </div>
       </div>
       <Box
         component="form"
