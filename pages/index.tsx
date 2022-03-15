@@ -18,8 +18,9 @@ const Home: NextPage = () => {
     item,
     setProducts,
     setPagination: setProductsPagination,
+    products,
   } = useContext(ProductsContext);
-  const { setOrders, setPagination: setOrdersPagination } =
+  const { orders, setOrders, setPagination: setOrdersPagination } =
     useContext(OrdersContext);
 
   const [isConnectedWithBackend, setIsConnectedWithBackend] = useState(true);
@@ -148,7 +149,7 @@ const Home: NextPage = () => {
       <Navbar />
 
       <main className={styles.main}>
-        <Chart />
+        <Chart orders={orders}/>
         <div className={styles.productsSection}>
           {showOrders ? (
             <Button
@@ -163,11 +164,11 @@ const Home: NextPage = () => {
             </Button>
           )}
           {showOrders ? (
-            <OrdersTable loadData={loadOrders} />
+            <OrdersTable loadOrders={loadOrders} orders={orders} />
           ) : (
-            <ProductsTable loadData={loadProducts} />
+            <ProductsTable loadProducts={loadProducts} products={products} />
           )}
-          <OrderBox loadProducts={loadProducts} item={item} />
+          <OrderBox loadProducts={loadProducts} loadOrders={loadOrders} item={item} />
         </div>
       </main>
 

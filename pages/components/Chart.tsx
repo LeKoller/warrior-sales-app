@@ -8,16 +8,17 @@ import {
 import { Animation } from "@devexpress/dx-react-chart";
 
 import styles from "../../styles/Chart.module.css";
-import { OrdersContext } from "../../contexts/OrdersContext";
+import { IOrder } from "../../types";
 
-function PieChart() {
+function PieChart(props: {orders: IOrder[]}) {
+  const { orders } = props;
+  
   const initialChartData = [
     { team: "Platinum", orders: 1 },
-    { team: "Diamond", orders: 1 },
-    { team: "Gold", orders: 1 },
+    { team: "Diamond", orders: 0 },
+    { team: "Gold", orders: 0 },
   ];
 
-  const { orders } = useContext(OrdersContext);
   const [chartData, setChartData] = useState(initialChartData);
 
   useEffect(() => {
@@ -41,7 +42,7 @@ function PieChart() {
       }
     }
 
-    if (sumDiamond && sumPlatinum && sumGold) {
+    if (sumDiamond || sumPlatinum || sumGold) {
       setChartData([
         { team: `Platinum (${sumPlatinum})`, orders: sumPlatinum },
         { team: `Diamond (${sumDiamond})`, orders: sumDiamond },

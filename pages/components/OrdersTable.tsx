@@ -20,7 +20,8 @@ import { OrdersContext } from "../../contexts/OrdersContext";
 import {
   ITablePaginationActionsProps,
   OrderRow,
-  ITableProps,
+  IOrder,
+  IOrdersTableProps,
 } from "../../types";
 import OrdersTableCore from "./OrdersTableCore";
 
@@ -113,10 +114,10 @@ function createData(
   return { id, address, delivery, team };
 }
 
-export default function OrdersTable(props: ITableProps) {
-  const { loadData } = props;
+export default function OrdersTable(props: IOrdersTableProps) {
+  const { loadOrders, orders } = props;
   const noRows: OrderRow[] = [];
-  const { orders, pagination } = useContext(OrdersContext);
+  const { pagination } = useContext(OrdersContext);
 
   const [page, setPage] = useState(pagination.currentPage);
   const [rowsPerPage, setRowsPerPage] = useState(20);
@@ -145,7 +146,7 @@ export default function OrdersTable(props: ITableProps) {
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
-    loadData(newPage + 1);
+    loadOrders(newPage + 1);
     setPage(newPage);
   };
 
@@ -154,7 +155,7 @@ export default function OrdersTable(props: ITableProps) {
   ) => {
     const parsedRowsPerPage = parseInt(event.target.value, 10);
 
-    loadData(1, parsedRowsPerPage);
+    loadOrders(1, parsedRowsPerPage);
     setRowsPerPage(parsedRowsPerPage);
     setPage(0);
   };

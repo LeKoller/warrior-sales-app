@@ -18,8 +18,8 @@ import { TableHead } from "@mui/material";
 import styles from "../../styles/Tables.module.css";
 import { ProductsContext } from "../../contexts/ProductsContext";
 import {
+  IProductsTableProps,
   ITablePaginationActionsProps,
-  ITableProps,
   ProductRow,
 } from "../../types";
 import ProductsTableCore from "./ProductsTableCore";
@@ -113,10 +113,10 @@ function createData(
   return { id, name, description, price };
 }
 
-export default function ProductsTable(props: ITableProps) {
-  const { loadData } = props;
+export default function ProductsTable(props: IProductsTableProps) {
+  const { loadProducts, products } = props;
   const noRows: ProductRow[] = [];
-  const { products, pagination } = useContext(ProductsContext);
+  const { pagination } = useContext(ProductsContext);
 
   const [page, setPage] = useState(pagination.currentPage);
   const [rowsPerPage, setRowsPerPage] = useState(20);
@@ -150,7 +150,7 @@ export default function ProductsTable(props: ITableProps) {
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
-    loadData(newPage + 1);
+    loadProducts(newPage + 1);
     setPage(newPage);
   };
 
@@ -159,7 +159,7 @@ export default function ProductsTable(props: ITableProps) {
   ) => {
     const parsedRowsPerPage = parseInt(event.target.value, 10);
 
-    loadData(1, parsedRowsPerPage);
+    loadProducts(1, parsedRowsPerPage);
     setRowsPerPage(parsedRowsPerPage);
     setPage(0);
   };

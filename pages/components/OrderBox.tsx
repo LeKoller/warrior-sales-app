@@ -13,8 +13,9 @@ import axios from "axios";
 export default function TextFieldSizes(props: {
   item: IProduct;
   loadProducts: () => void;
+  loadOrders: () => void;
 }) {
-  const { item, loadProducts } = props;
+  const { item, loadProducts, loadOrders } = props;
 
   const { address, setAddress, items, setItems } = useContext(CartContext);
   const { token } = useContext(AuthContext);
@@ -93,6 +94,7 @@ export default function TextFieldSizes(props: {
           setCart(emptyItems.filter((i) => i.id !== 0));
           setQuantity(1);
           setAddress("");
+          loadOrders();
         }
       } catch {
         setErrorTitle("Não foi possível criar a encomenda");
@@ -124,8 +126,9 @@ export default function TextFieldSizes(props: {
 
   const createProduct = async () => {
     const parsedPrice = parseFloat(
-      newProductPrice.replace(",", ".").replace(".", "")
-    ).toFixed(2);
+      newProductPrice.replace(".", "").replace(",", ".")
+    );
+
     const newProduct = {
       name: newProductName,
       price: parsedPrice,
